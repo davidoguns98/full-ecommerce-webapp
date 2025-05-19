@@ -225,16 +225,11 @@ const allProducts = [
   },
 ];
 
-const TrendingProducts = ({ selectedCategory }) => {
+const TrendingProducts = ({ selectedCategory, onAddToCart }) => {
   const filteredProducts =
     selectedCategory === "All"
       ? allProducts
       : allProducts.filter((product) => product.category === selectedCategory);
-
-  const handleAddToCart = (product) => {
-    // Replace with your own cart logic
-    alert(`Added "${product.title}" to cart.`);
-  };
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-10">
@@ -264,7 +259,7 @@ const TrendingProducts = ({ selectedCategory }) => {
               </span>
 
               <button
-                onClick={() => handleAddToCart(product)}
+                onClick={() => onAddToCart(product)}
                 className="mt-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
               >
                 Add to Cart

@@ -7,23 +7,26 @@ import {
   faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const Navbar = ({ cart }) => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDesktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
   const [isMobileDropdownOpen, setMobileDropdownOpen] = useState(false);
+
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <nav className="sticky top-0 z-50 bg-gray-800 text-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
-        <div className="flex items-center">
+        <Link to="/" className="flex items-center">
           <img
             src="https://via.placeholder.com/40"
             alt="Logo"
             className="h-10 w-auto"
           />
-        </div>
+        </Link>
 
         {/* Search Bar (Desktop only) */}
         <div className="hidden md:flex items-center space-x-2">
@@ -74,13 +77,13 @@ const Navbar = () => {
               )}
             </div>
 
-            <a
-              href="#"
+            <Link
+              to="/cart"
               className="flex items-center space-x-1 hover:text-blue-400"
             >
               <FontAwesomeIcon icon={faShoppingCart} />
-              <span>Cart</span>
-            </a>
+              <span>Cart ({totalItems})</span>
+            </Link>
           </div>
 
           {/* Mobile Hamburger (right-aligned) */}

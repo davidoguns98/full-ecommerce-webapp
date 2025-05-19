@@ -6,14 +6,17 @@ import Footer from "../components/Footer";
 import TrendingProducts from "../components/TrendingProducts";
 import FeedbackCTA from "../components/FeedBackCTA";
 
-const Home = () => {
+const Home = ({ cart, onAddToCart }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   return (
     <div>
-      <Navbar />
+      <Navbar cart={cart} />
       <Hero />
       <FeaturedProducts onCategorySelect={setSelectedCategory} />
-      <TrendingProducts selectedCategory={selectedCategory} />
+      <TrendingProducts
+        selectedCategory={selectedCategory}
+        onAddToCart={onAddToCart}
+      />
       <FeedbackCTA />
       <Footer />
     </div>

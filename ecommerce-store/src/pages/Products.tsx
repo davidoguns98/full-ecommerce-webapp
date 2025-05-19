@@ -4,13 +4,17 @@ import FeaturedProducts from "../components/FeaturedProducts";
 import TrendingProducts from "../components/TrendingProducts";
 import Footer from "../components/Footer";
 
-const Products = () => {
+const Products = ({ cart, onAddToCart }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
+
   return (
     <div>
-      <Navbar />
+      <Navbar cart={cart} />
       <FeaturedProducts onCategorySelect={setSelectedCategory} />
-      <TrendingProducts selectedCategory={selectedCategory} />
+      <TrendingProducts
+        selectedCategory={selectedCategory}
+        onAddToCart={onAddToCart}
+      />
       <Footer />
     </div>
   );
