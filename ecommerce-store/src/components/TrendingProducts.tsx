@@ -1,236 +1,28 @@
 import React from "react";
 
-// Sample products
-const allProducts = [
-  // Electronics
-  {
-    id: 1,
-    title: "Smart LED TV",
-    category: "Electronics",
-    image: "https://via.placeholder.com/300x200?text=Smart+LED+TV",
-    price: 399.99,
-  },
-  {
-    id: 2,
-    title: "Wireless Headphones",
-    category: "Electronics",
-    image: "https://via.placeholder.com/300x200?text=Wireless+Headphones",
-    price: 89.99,
-  },
-  {
-    id: 3,
-    title: "Bluetooth Speaker",
-    category: "Electronics",
-    image: "https://via.placeholder.com/300x200?text=Bluetooth+Speaker",
-    price: 49.99,
-  },
-  {
-    id: 4,
-    title: "Gaming Console",
-    category: "Electronics",
-    image: "https://via.placeholder.com/300x200?text=Gaming+Console",
-    price: 299.99,
-  },
-  {
-    id: 5,
-    title: "Smart Watch",
-    category: "Electronics",
-    image: "https://via.placeholder.com/300x200?text=Smart+Watch",
-    price: 159.99,
-  },
+interface Product {
+  id: string;
+  title: string;
+  price: number;
+  category: string;
+  image: string;
+  // Add any other fields your product might have
+}
 
-  // Fashion
-  {
-    id: 6,
-    title: "Men's T-Shirt",
-    category: "Fashion",
-    image: "https://via.placeholder.com/300x200?text=Men%27s+T-Shirt",
-    price: 19.99,
-  },
-  {
-    id: 7,
-    title: "Women's Dress",
-    category: "Fashion",
-    image: "https://via.placeholder.com/300x200?text=Women%27s+Dress",
-    price: 34.99,
-  },
-  {
-    id: 8,
-    title: "Sneakers",
-    category: "Fashion",
-    image: "https://via.placeholder.com/300x200?text=Sneakers",
-    price: 74.99,
-  },
-  {
-    id: 9,
-    title: "Jeans",
-    category: "Fashion",
-    image: "https://via.placeholder.com/300x200?text=Jeans",
-    price: 44.99,
-  },
-  {
-    id: 10,
-    title: "Leather Jacket",
-    category: "Fashion",
-    image: "https://via.placeholder.com/300x200?text=Leather+Jacket",
-    price: 99.99,
-  },
+interface TrendingProductsProps {
+  products: Product[];
+  loading: boolean;
+  selectedCategory: string;
+  onAddToCart: (product: Product) => void;
+}
 
-  // Home and Office
-  {
-    id: 11,
-    title: "Office Chair",
-    category: "Home and Office",
-    image: "https://via.placeholder.com/300x200?text=Office+Chair",
-    price: 129.99,
-  },
-  {
-    id: 12,
-    title: "Desk Lamp",
-    category: "Home and Office",
-    image: "https://via.placeholder.com/300x200?text=Desk+Lamp",
-    price: 24.99,
-  },
-  {
-    id: 13,
-    title: "Bookshelf",
-    category: "Home and Office",
-    image: "https://via.placeholder.com/300x200?text=Bookshelf",
-    price: 59.99,
-  },
-  {
-    id: 14,
-    title: "Laptop Stand",
-    category: "Home and Office",
-    image: "https://via.placeholder.com/300x200?text=Laptop+Stand",
-    price: 39.99,
-  },
-  {
-    id: 15,
-    title: "Ergonomic Desk",
-    category: "Home and Office",
-    image: "https://via.placeholder.com/300x200?text=Ergonomic+Desk",
-    price: 189.99,
-  },
-
-  // Phones and Gadgets
-  {
-    id: 16,
-    title: "Smartphone X",
-    category: "Phones and Gadgets",
-    image: "https://via.placeholder.com/300x200?text=Smartphone+X",
-    price: 699.99,
-  },
-  {
-    id: 17,
-    title: "Power Bank",
-    category: "Phones and Gadgets",
-    image: "https://via.placeholder.com/300x200?text=Power+Bank",
-    price: 29.99,
-  },
-  {
-    id: 18,
-    title: "Phone Tripod",
-    category: "Phones and Gadgets",
-    image: "https://via.placeholder.com/300x200?text=Phone+Tripod",
-    price: 15.99,
-  },
-  {
-    id: 19,
-    title: "Wireless Charger",
-    category: "Phones and Gadgets",
-    image: "https://via.placeholder.com/300x200?text=Wireless+Charger",
-    price: 22.99,
-  },
-  {
-    id: 20,
-    title: "Smart Ring",
-    category: "Phones and Gadgets",
-    image: "https://via.placeholder.com/300x200?text=Smart+Ring",
-    price: 45.99,
-  },
-
-  // Health and Beauty
-  {
-    id: 21,
-    title: "Vitamin C Serum",
-    category: "Health and Beauty",
-    image: "https://via.placeholder.com/300x200?text=Vitamin+C+Serum",
-    price: 18.99,
-  },
-  {
-    id: 22,
-    title: "Hair Dryer",
-    category: "Health and Beauty",
-    image: "https://via.placeholder.com/300x200?text=Hair+Dryer",
-    price: 49.99,
-  },
-  {
-    id: 23,
-    title: "Massage Gun",
-    category: "Health and Beauty",
-    image: "https://via.placeholder.com/300x200?text=Massage+Gun",
-    price: 79.99,
-  },
-  {
-    id: 24,
-    title: "Facial Cleanser",
-    category: "Health and Beauty",
-    image: "https://via.placeholder.com/300x200?text=Facial+Cleanser",
-    price: 14.99,
-  },
-  {
-    id: 25,
-    title: "Essential Oil Set",
-    category: "Health and Beauty",
-    image: "https://via.placeholder.com/300x200?text=Essential+Oil+Set",
-    price: 27.99,
-  },
-
-  // Home Appliances
-  {
-    id: 26,
-    title: "Microwave Oven",
-    category: "Home Appliances",
-    image: "https://via.placeholder.com/300x200?text=Microwave+Oven",
-    price: 129.99,
-  },
-  {
-    id: 27,
-    title: "Air Conditioner",
-    category: "Home Appliances",
-    image: "https://via.placeholder.com/300x200?text=Air+Conditioner",
-    price: 349.99,
-  },
-  {
-    id: 28,
-    title: "Washing Machine",
-    category: "Home Appliances",
-    image: "https://via.placeholder.com/300x200?text=Washing+Machine",
-    price: 499.99,
-  },
-  {
-    id: 29,
-    title: "Refrigerator",
-    category: "Home Appliances",
-    image: "https://via.placeholder.com/300x200?text=Refrigerator",
-    price: 699.99,
-  },
-  {
-    id: 30,
-    title: "Vacuum Cleaner",
-    category: "Home Appliances",
-    image: "https://via.placeholder.com/300x200?text=Vacuum+Cleaner",
-    price: 89.99,
-  },
-];
-
-const TrendingProducts = ({ selectedCategory, onAddToCart }) => {
-  const filteredProducts =
-    selectedCategory === "All"
-      ? allProducts
-      : allProducts.filter((product) => product.category === selectedCategory);
-
+const TrendingProducts: React.FC<TrendingProductsProps> = ({
+  products = [],
+  loading,
+  selectedCategory,
+  onAddToCart,
+}) => {
+  const safeProducts = Array.isArray(products) ? products : [];
   return (
     <section className="max-w-7xl mx-auto px-4 py-10">
       <h2 className="text-2xl font-bold text-center mb-6">
@@ -238,11 +30,13 @@ const TrendingProducts = ({ selectedCategory, onAddToCart }) => {
         {selectedCategory !== "All" && ` - ${selectedCategory}`}
       </h2>
 
-      {filteredProducts.length === 0 ? (
+      {loading ? (
+        <p className="text-center text-gray-500">Loading...</p>
+      ) : !safeProducts || safeProducts.length === 0 ? (
         <p className="text-center text-gray-500">No products found.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredProducts.map((product) => (
+          {safeProducts.map((product) => (
             <div
               key={product.id}
               className="border rounded-md shadow-sm hover:shadow-md transition p-4 flex flex-col"

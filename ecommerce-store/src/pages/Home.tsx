@@ -5,17 +5,39 @@ import FeaturedProducts from "../components/FeaturedProducts";
 import Footer from "../components/Footer";
 import TrendingProducts from "../components/TrendingProducts";
 import FeedbackCTA from "../components/FeedBackCTA";
+import { Products } from "./Products";
+interface HomeProps {
+  cart: [];
+  onAddToCart: (product: Products) => void;
+  products: Products[];
+  loading: boolean;
+  user: any;
+  selectedCategory: string;
+  setSelectedCategory: (category: string) => void;
+}
 
-const Home = ({ cart, onAddToCart }) => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
+const Home: React.FC<HomeProps> = ({
+  cart,
+  onAddToCart,
+  products,
+  loading,
+  user,
+  selectedCategory,
+  setSelectedCategory,
+}) => {
   return (
     <div>
-      <Navbar cart={cart} />
+      <Navbar user={user} cart={cart} />
       <Hero />
-      <FeaturedProducts onCategorySelect={setSelectedCategory} />
+      <FeaturedProducts
+        setSelectedCategory={setSelectedCategory}
+        seletedCategory={selectedCategory}
+      />
       <TrendingProducts
         selectedCategory={selectedCategory}
         onAddToCart={onAddToCart}
+        products={products}
+        loading={loading}
       />
       <FeedbackCTA />
       <Footer />

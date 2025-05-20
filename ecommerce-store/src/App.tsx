@@ -1,11 +1,59 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CartPage from "./components/CartPage";
+import Order from "./pages/Order";
+import { supabase } from "./supabaseClient";
 
 function App() {
   const [cart, setCart] = useState([]);
+  const [user, setUser] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  useEffect(() => {
+    // Get initial session
+    const session = supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user || null);
+    });
+
+    // Listen for changes (sign in / out)
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user || null);
+      }
+    );
+
+    return () => listener?.subscription?.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+
+      let query = supabase.from("allproducts").select("*");
+
+      if (selectedCategory !== "All") {
+        query = query.eq("category", selectedCategory);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error("Error fetching products:", error.message);
+        setProducts([]);
+      } else {
+        console.log(data);
+        setProducts(data);
+      }
+
+      setLoading(false);
+    };
+
+    fetchProducts();
+  }, [selectedCategory]);
 
   const handleAddToCart = (product) => {
     setCart((prevCart) => {
@@ -35,11 +83,31 @@ function App() {
     <Routes>
       <Route
         path="/"
-        element={<Home cart={cart} onAddToCart={handleAddToCart} />}
+        element={
+          <Home
+            cart={cart}
+            onAddToCart={handleAddToCart}
+            user={user}
+            loading={loading}
+            products={products}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+        }
       />
       <Route
         path="/products"
-        element={<Products cart={cart} onAddToCart={handleAddToCart} />}
+        element={
+          <Products
+            cart={cart}
+            user={user}
+            onAddToCart={handleAddToCart}
+            products={products}
+            loading={loading}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+        }
       />
       <Route
         path="/cart"
@@ -51,6 +119,7 @@ function App() {
           />
         }
       />
+      <Route path="/order" element={<Order cart={cart} />} />
     </Routes>
   );
 }

@@ -1,8 +1,11 @@
 import React from "react";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import { useNavigate } from "react-router-dom";
 
 const CartPage = ({ cart, onQuantityChange, onRemove }) => {
+  const navigate = useNavigate();
+
   const totalPrice = cart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
@@ -58,6 +61,17 @@ const CartPage = ({ cart, onQuantityChange, onRemove }) => {
             <div className="text-right mt-6 text-xl font-bold">
               Total: ${totalPrice.toFixed(2)}
             </div>
+          </div>
+        )}
+
+        {cart.length > 0 && (
+          <div className="text-right mt-4">
+            <button
+              onClick={() => navigate("/order")}
+              className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Proceed to Checkout
+            </button>
           </div>
         )}
       </div>

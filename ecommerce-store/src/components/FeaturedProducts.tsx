@@ -1,16 +1,20 @@
 import React from "react";
 
+interface FeaturedProductsProps {
+  setSelectedCategory: (category: string) => void;
+}
+
 const categories = [
   {
     title: "Electronics",
     image: "https://via.placeholder.com/300x200?text=Electronics",
   },
   {
-    title: "Fashion",
+    title: "Fitness",
     image: "https://via.placeholder.com/300x200?text=Fashion",
   },
   {
-    title: "Home and Office",
+    title: "Office",
     image: "https://via.placeholder.com/300x200?text=Home+%26+Office",
   },
   {
@@ -18,16 +22,18 @@ const categories = [
     image: "https://via.placeholder.com/300x200?text=Phones+%26+Gadgets",
   },
   {
-    title: "Health and Beauty",
+    title: "Outdoors",
     image: "https://via.placeholder.com/300x200?text=Health+%26+Beauty",
   },
   {
-    title: "Home Appliances",
+    title: "Home ",
     image: "https://via.placeholder.com/300x200?text=Home+Appliances",
   },
 ];
 
-const FeaturedProducts = ({ onCategorySelect }) => {
+const FeaturedProducts: React.FC<FeaturedProductsProps> = ({
+  setSelectedCategory,
+}) => {
   return (
     <section className="max-w-7xl mx-auto px-4 py-8">
       <h2 className="text-2xl font-bold mb-6 text-center">Shop by Category</h2>
@@ -36,7 +42,7 @@ const FeaturedProducts = ({ onCategorySelect }) => {
           <div
             key={cat.title}
             className="relative group rounded-lg overflow-hidden shadow hover:shadow-lg transition cursor-pointer"
-            onClick={() => onCategorySelect(cat.title)}
+            onClick={() => setSelectedCategory(cat.title)}
           >
             <img
               src={cat.image}
