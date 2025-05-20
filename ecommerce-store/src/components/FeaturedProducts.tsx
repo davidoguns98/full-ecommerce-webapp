@@ -7,27 +7,33 @@ interface FeaturedProductsProps {
 const categories = [
   {
     title: "Electronics",
-    image: "https://via.placeholder.com/300x200?text=Electronics",
+    image:
+      "https://plus.unsplash.com/premium_photo-1673709635732-c83149ac689d?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8ZWxlY3Ryb25pY3xlbnwwfHwwfHx8MA%3D%3D",
   },
   {
     title: "Fitness",
-    image: "https://via.placeholder.com/300x200?text=Fashion",
+    image:
+      "https://images.unsplash.com/photo-1627483298606-cf54c61779a9?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDF8MHxzZWFyY2h8MXx8Zml0bmVzc3xlbnwwfHwwfHx8MA%3D%3D",
   },
   {
     title: "Office",
-    image: "https://via.placeholder.com/300x200?text=Home+%26+Office",
+    image:
+      "https://images.unsplash.com/photo-1579487785973-74d2ca7abdd5?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8b2ZmaWNlfGVufDB8fDB8fHww",
   },
   {
     title: "Phones and Gadgets",
-    image: "https://via.placeholder.com/300x200?text=Phones+%26+Gadgets",
+    image:
+      "https://images.unsplash.com/photo-1513611771808-7e8ab7f1dec6?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGhvbmVzfGVufDB8fDB8fHww",
   },
   {
     title: "Outdoors",
-    image: "https://via.placeholder.com/300x200?text=Health+%26+Beauty",
+    image:
+      "https://images.unsplash.com/photo-1542309174-d33b34ce6ea7?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8b3V0ZG9vcnN8ZW58MHx8MHx8fDA%3D",
   },
   {
     title: "Home ",
-    image: "https://via.placeholder.com/300x200?text=Home+Appliances",
+    image:
+      "https://media.istockphoto.com/id/461773913/photo/group-of-household-appliances.webp?a=1&b=1&s=612x612&w=0&k=20&c=QE6ZCqKYq0qLcvAkAoQZgNrHre_EFqwbxiV9mYxC7mA=",
   },
 ];
 

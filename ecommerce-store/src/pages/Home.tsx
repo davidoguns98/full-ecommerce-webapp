@@ -5,7 +5,16 @@ import FeaturedProducts from "../components/FeaturedProducts";
 import Footer from "../components/Footer";
 import TrendingProducts from "../components/TrendingProducts";
 import FeedbackCTA from "../components/FeedBackCTA";
-import { Products } from "./Products";
+
+interface Products {
+  id: string;
+  title: string;
+  price: number;
+  category: string;
+  image: string;
+  // Add any other fields your product might have
+}
+
 interface HomeProps {
   cart: [];
   onAddToCart: (product: Products) => void;
