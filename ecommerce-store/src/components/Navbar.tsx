@@ -11,8 +11,30 @@ import { Link } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import Modal from "./Modal";
 import SignInSignUpModal from "./SignInSignUpModal";
+import type { User } from "@supabase/supabase-js";
 
-const Navbar = ({ cart = [], user }) => {
+// Types
+interface Product {
+  id: string;
+  title: string;
+  price: number;
+  category: string;
+  image: string;
+  description: string;
+  rating: number;
+  stock: boolean;
+}
+
+interface CartItem extends Product {
+  quantity: number;
+}
+
+interface NavbarProps {
+  cart: CartItem[];
+  user: User | null; // Replace `any` with the appropriate Supabase user type if available
+}
+
+const Navbar: React.FC<NavbarProps> = ({ cart = [], user }) => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDesktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
   const [isMobileDropdownOpen, setMobileDropdownOpen] = useState(false);
@@ -28,11 +50,8 @@ const Navbar = ({ cart = [], user }) => {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Logo"
-            className="h-10 w-auto"
-          />
+          <img src="logo.png" alt="Logo" className="h-10 w-auto" />
+          <span className="font-bold">DJE SHOP</span>
         </Link>
 
         {/* Search Bar (Desktop only) */}
@@ -40,7 +59,7 @@ const Navbar = ({ cart = [], user }) => {
           <input
             type="text"
             placeholder="Search..."
-            className="w-64 border border-gray-300 rounded-l-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+            className="w-64 border text-white border-gray-300 rounded-l-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 "
           />
           <button className="bg-blue-500 text-white px-3 py-1.5 text-sm rounded-r-md hover:bg-blue-600">
             Search
@@ -71,24 +90,35 @@ const Navbar = ({ cart = [], user }) => {
               </button>
               {isDesktopDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-40 bg-white text-gray-800 border rounded shadow-md z-50">
-                  <button
-                    onClick={() => setShowAuthModal(true)}
-                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
-                  >
-                    Profile
-                  </button>
-                  <Link
-                    to="/orders"
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Orders
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="block px-4 py-2 hover:bg-gray-100"
-                  >
-                    Logout
-                  </button>
+                  {user ? (
+                    <>
+                      <button
+                        onClick={() => setShowAuthModal(true)}
+                        className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
+                      >
+                        Profile
+                      </button>
+                      <Link
+                        to="/orders"
+                        className="block px-4 py-2 hover:bg-gray-100"
+                      >
+                        Orders
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="block px-4 py-2 hover:bg-gray-100"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      onClick={() => setShowAuthModal(true)}
+                      className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
+                    >
+                      Sign In / Sign Up
+                    </button>
+                  )}
                 </div>
               )}
             </div>
@@ -134,9 +164,10 @@ const Navbar = ({ cart = [], user }) => {
               Search
             </button>
           </div>
-          <a href="#" className="block hover:text-blue-400">
-            Product
-          </a>
+          <Link to="/products" className="block hover:text-blue-400">
+            <FontAwesomeIcon icon={faBox} />
+            <span>Product</span>
+          </Link>
 
           <button
             onClick={() => setMobileDropdownOpen(!isMobileDropdownOpen)}
@@ -147,27 +178,63 @@ const Navbar = ({ cart = [], user }) => {
           </button>
 
           {isMobileDropdownOpen && (
-            <div className="pl-4 mt-1 space-y-1">
-              <a href="#" className="block hover:text-blue-400">
-                Profile
-              </a>
-              <a href="#" className="block hover:text-blue-400">
-                Orders
-              </a>
-              <a href="#" className="block hover:text-blue-400">
-                Logout
-              </a>
+            <div className="pl-4 mt-1 space-y-1 hover:text-blue-500">
+              {user ? (
+                <>
+                  <button
+                    onClick={() => setShowAuthModal(true)}
+                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
+                  >
+                    Profile
+                  </button>
+                  <Link
+                    to="/orders"
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Orders
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="block px-4 py-2 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => setShowAuthModal(true)}
+                  className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
+                >
+                  Sign In / Sign Up
+                </button>
+              )}
             </div>
           )}
 
-          <a href="#" className="block hover:text-blue-400">
-            Cart
-          </a>
+          <Link
+            to="/cart"
+            className="flex items-center space-x-1 hover:text-blue-400"
+          >
+            {totalItems > 0 ? (
+              <div className="text-red-500 ">
+                <FontAwesomeIcon icon={faShoppingCart} />
+                <span>Cart ({totalItems})</span>
+              </div>
+            ) : (
+              <div>
+                <FontAwesomeIcon icon={faShoppingCart} />
+                <span>Cart ({totalItems})</span>
+              </div>
+            )}
+          </Link>
         </div>
       )}
 
       <Modal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)}>
-        <SignInSignUpModal onClose={() => setShowAuthModal(false)} />
+        <SignInSignUpModal
+          onClose={() => setShowAuthModal(false)}
+          onAuthSuccess={() => setShowAuthModal(false)}
+        />
       </Modal>
     </nav>
   );

@@ -3,8 +3,30 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import type { User } from "@supabase/supabase-js";
 
-const OrderPage = ({ cart, setCart }) => {
+interface Product {
+  id: string;
+  title: string;
+  price: number;
+  category: string;
+  image: string;
+  description: string;
+  rating: number;
+  stock: boolean;
+}
+
+interface CartItem extends Product {
+  quantity: number;
+}
+
+interface OrderPageProps {
+  cart: CartItem[];
+  user: User | null;
+  setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
+}
+
+const OrderPage: React.FC<OrderPageProps> = ({ cart, setCart, user }) => {
   const [formData, setFormData] = useState({
     fullname: "",
     address: "",
@@ -21,7 +43,9 @@ const OrderPage = ({ cart, setCart }) => {
     0
   );
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -56,7 +80,7 @@ const OrderPage = ({ cart, setCart }) => {
 
   return (
     <>
-      <Navbar cart={cart} />
+      <Navbar user={user} cart={cart} />
       <div className="max-w-4xl mx-auto px-4 py-10">
         <h2 className="text-2xl font-bold mb-6">Checkout</h2>
 

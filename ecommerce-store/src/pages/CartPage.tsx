@@ -1,9 +1,37 @@
 import React from "react";
-import Footer from "./Footer";
-import Navbar from "./Navbar";
-import { useNavigate } from "react-router-dom";
 
-const CartPage = ({ cart, onQuantityChange, onRemove }) => {
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import type { User } from "@supabase/supabase-js";
+
+interface Product {
+  id: string;
+  title: string;
+  price: number;
+  category: string;
+  image: string;
+  description: string;
+  rating: number;
+  stock: boolean;
+}
+
+interface CartItem extends Product {
+  quantity: number;
+}
+
+interface CartPageProps {
+  cart: CartItem[];
+  onQuantityChange: (id: string, quantity: number) => void;
+  onRemove: (id: string) => void;
+  user: User | null; // Replace `any` with your Supabase user type if needed
+}
+const CartPage: React.FC<CartPageProps> = ({
+  cart,
+  onQuantityChange,
+  onRemove,
+  user,
+}) => {
   const navigate = useNavigate();
 
   const totalPrice = cart.reduce(
@@ -13,7 +41,7 @@ const CartPage = ({ cart, onQuantityChange, onRemove }) => {
 
   return (
     <>
-      <Navbar cart={cart} />
+      <Navbar user={user} cart={cart} />
       <div className="max-w-4xl mx-auto px-4 py-10">
         <h2 className="text-2xl font-bold mb-6">Your Cart</h2>
 

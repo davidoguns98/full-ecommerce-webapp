@@ -1,34 +1,67 @@
 import { Routes, Route } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
-import { useEffect, useState } from "react";
-import CartPage from "./components/CartPage";
+import CartPage from "./pages/CartPage";
 import Order from "./pages/Order";
 import { supabase } from "./supabaseClient";
+import type { User } from "@supabase/supabase-js";
+interface Product {
+  id: string;
+  title: string;
+  price: number;
+  category: string;
+  image: string;
+  description: string;
+  rating: number;
+  stock: boolean;
+}
+
+interface CartItem extends Product {
+  quantity: number;
+}
 
 function App() {
-  const [cart, setCart] = useState([]);
-  const [user, setUser] = useState(null);
-  const [products, setProducts] = useState([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [user, setUser] = useState<User | null>(null); // You can replace `any` with Supabase `User` type if preferred
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
 
+  // Load cart from localStorage
   useEffect(() => {
-    // Get initial session
-    const session = supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user || null);
-    });
-
-    // Listen for changes (sign in / out)
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setUser(session?.user || null);
-      }
-    );
-
-    return () => listener?.subscription?.unsubscribe();
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      setCart(JSON.parse(storedCart));
+    }
   }, []);
 
+  // Persist cart to localStorage
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+  // Handle user session from Supabase
+  useEffect(() => {
+    const getSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      setUser(session?.user ?? null);
+    };
+
+    getSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Fetch products based on category
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -45,8 +78,7 @@ function App() {
         console.error("Error fetching products:", error.message);
         setProducts([]);
       } else {
-        console.log(data);
-        setProducts(data);
+        setProducts(data as Product[]);
       }
 
       setLoading(false);
@@ -55,7 +87,7 @@ function App() {
     fetchProducts();
   }, [selectedCategory]);
 
-  const handleAddToCart = (product) => {
+  const handleAddToCart = (product: Product) => {
     setCart((prevCart) => {
       const exists = prevCart.find((item) => item.id === product.id);
       if (exists) {
@@ -69,13 +101,13 @@ function App() {
     });
   };
 
-  const handleQuantityChange = (id, quantity) => {
+  const handleQuantityChange = (id: string, quantity: number) => {
     setCart((prevCart) =>
       prevCart.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
   };
 
-  const handleRemove = (id) => {
+  const handleRemove = (id: string) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== id));
   };
 
@@ -116,10 +148,14 @@ function App() {
             cart={cart}
             onQuantityChange={handleQuantityChange}
             onRemove={handleRemove}
+            user={user}
           />
         }
       />
-      <Route path="/order" element={<Order cart={cart} />} />
+      <Route
+        path="/order"
+        element={<Order cart={cart} user={user} setCart={setCart} />}
+      />
     </Routes>
   );
 }

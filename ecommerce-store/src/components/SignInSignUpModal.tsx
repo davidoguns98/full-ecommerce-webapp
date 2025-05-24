@@ -3,7 +3,15 @@ import { supabase } from "../supabaseClient";
 
 const SignInSignUpModal = ({ onClose, onAuthSuccess }) => {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [formData, setFormData] = useState({ email: "", password: "" });
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: "",
+    username: "",
+    address: "",
+    dateOfBirth: "",
+  });
   const [errorMsg, setErrorMsg] = useState("");
 
   const handleChange = (e) => {
@@ -15,7 +23,15 @@ const SignInSignUpModal = ({ onClose, onAuthSuccess }) => {
     e.preventDefault();
     setErrorMsg("");
 
-    const { email, password } = formData;
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      username,
+      address,
+      dateOfBirth,
+    } = formData;
 
     try {
       if (isSignUp) {
@@ -32,14 +48,17 @@ const SignInSignUpModal = ({ onClose, onAuthSuccess }) => {
 
         // 2. Insert into profiles table
         if (userId) {
-          const { error: profileError } = await supabase
-            .from("profiles")
-            .insert([
-              {
-                id: userId,
-                email,
-              },
-            ]);
+          const { error: profileError } = await supabase.from("users").insert([
+            {
+              id: userId,
+              email,
+              first_name: firstName,
+              last_name: lastName,
+              username,
+              address,
+              date_of_birth: dateOfBirth,
+            },
+          ]);
           if (profileError) throw profileError;
         }
       } else {
@@ -59,11 +78,60 @@ const SignInSignUpModal = ({ onClose, onAuthSuccess }) => {
   };
 
   return (
-    <div className="text-gray-800">
+    <div className="text-gray-800 flex flex-col items-center justify-between mx-auto">
       <h2 className="text-2xl font-bold mb-4">
         {isSignUp ? "Create Account" : "Sign In"}
       </h2>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {isSignUp && (
+          <>
+            <input
+              type="text"
+              name="firstName"
+              placeholder="First Name"
+              required
+              className="w-full px-4 py-2 border rounded"
+              value={formData.firstName}
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Last Name"
+              required
+              className="w-full px-4 py-2 border rounded"
+              value={formData.lastName}
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="username"
+              placeholder="User Name"
+              required
+              className="w-full px-4 py-2 border rounded"
+              value={formData.username}
+              onChange={handleChange}
+            />
+            <input
+              type="text"
+              name="address"
+              placeholder="Address"
+              required
+              className="w-full px-4 py-2 border rounded"
+              value={formData.address}
+              onChange={handleChange}
+            />
+            <input
+              type="date"
+              name="dateOfBirth"
+              placeholder="Date of Birth"
+              required
+              className="w-full px-4 py-2 border rounded"
+              value={formData.dateOfBirth}
+              onChange={handleChange}
+            />
+          </>
+        )}
         <input
           type="email"
           name="email"

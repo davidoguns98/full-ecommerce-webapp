@@ -1,26 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import FeaturedProducts from "../components/FeaturedProducts";
 import Footer from "../components/Footer";
 import TrendingProducts from "../components/TrendingProducts";
 import FeedbackCTA from "../components/FeedBackCTA";
+import type { User } from "@supabase/supabase-js";
 
-interface Products {
+interface Product {
   id: string;
   title: string;
   price: number;
   category: string;
   image: string;
+  description: string;
+  rating: number;
+  stock: boolean;
   // Add any other fields your product might have
 }
-
+interface CartItem extends Product {
+  quantity: number;
+}
 interface HomeProps {
-  cart: [];
-  onAddToCart: (product: Products) => void;
-  products: Products[];
+  cart: CartItem[];
+  onAddToCart: (product: Product) => void;
+  products: Product[];
   loading: boolean;
-  user: any;
+  user: User | null;
   selectedCategory: string;
   setSelectedCategory: (category: string) => void;
 }
@@ -38,10 +44,7 @@ const Home: React.FC<HomeProps> = ({
     <div>
       <Navbar user={user} cart={cart} />
       <Hero />
-      <FeaturedProducts
-        setSelectedCategory={setSelectedCategory}
-        seletedCategory={selectedCategory}
-      />
+      <FeaturedProducts setSelectedCategory={setSelectedCategory} />
       <TrendingProducts
         selectedCategory={selectedCategory}
         onAddToCart={onAddToCart}
