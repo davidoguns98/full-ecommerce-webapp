@@ -1,9 +1,28 @@
 import React, { useState } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import { supabase } from "../supabaseClient";
 
-const SignInSignUpModal = ({ onClose, onAuthSuccess }) => {
+interface SignInSignUpModalProps {
+  onClose: () => void;
+  onAuthSuccess?: () => void;
+}
+
+interface FormData {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  address: string;
+  dateOfBirth: string;
+}
+
+const SignInSignUpModal: React.FC<SignInSignUpModalProps> = ({
+  onClose,
+  onAuthSuccess,
+}) => {
   const [isSignUp, setIsSignUp] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
     firstName: "",
@@ -14,12 +33,14 @@ const SignInSignUpModal = ({ onClose, onAuthSuccess }) => {
   });
   const [errorMsg, setErrorMsg] = useState("");
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMsg("");
 
@@ -35,7 +56,6 @@ const SignInSignUpModal = ({ onClose, onAuthSuccess }) => {
 
     try {
       if (isSignUp) {
-        // 1. Sign up
         const { data: signUpData, error: signUpError } =
           await supabase.auth.signUp({
             email,
@@ -46,7 +66,6 @@ const SignInSignUpModal = ({ onClose, onAuthSuccess }) => {
 
         const userId = signUpData.user?.id;
 
-        // 2. Insert into profiles table
         if (userId) {
           const { error: profileError } = await supabase.from("users").insert([
             {
@@ -59,10 +78,10 @@ const SignInSignUpModal = ({ onClose, onAuthSuccess }) => {
               date_of_birth: dateOfBirth,
             },
           ]);
+
           if (profileError) throw profileError;
         }
       } else {
-        // Sign in
         const { error: signInError } = await supabase.auth.signInWithPassword({
           email,
           password,
@@ -72,8 +91,8 @@ const SignInSignUpModal = ({ onClose, onAuthSuccess }) => {
 
       onAuthSuccess?.();
       onClose();
-    } catch (err) {
-      setErrorMsg(err.message);
+    } catch {
+      setErrorMsg("An unexpected error occurred");
     }
   };
 

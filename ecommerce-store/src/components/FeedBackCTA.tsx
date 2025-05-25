@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 
 const FeedbackCTA = () => {
   const [form, setForm] = useState({
@@ -7,10 +8,13 @@ const FeedbackCTA = () => {
     message: "",
   });
 
-  const handleChange = (e) =>
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const subject = `Feedback from ${form.name}`;
@@ -53,7 +57,7 @@ const FeedbackCTA = () => {
           <textarea
             name="message"
             placeholder="Your Message"
-            rows="5"
+            rows={5}
             value={form.message}
             onChange={handleChange}
             required

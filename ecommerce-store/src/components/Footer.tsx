@@ -1,4 +1,3 @@
-import React from "react";
 import {
   faFacebookF,
   faTwitter,
@@ -13,7 +12,7 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Brand/Logo */}
         <div>
-          <h2 className="text-2xl font-bold mb-3">MyShop</h2>
+          <h2 className="text-2xl font-bold mb-3">DJE Shop</h2>
           <p className="text-gray-400 text-sm">
             Your one-stop marketplace for electronics, fashion, gadgets & more.
           </p>

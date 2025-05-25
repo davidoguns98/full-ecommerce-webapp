@@ -1,17 +1,31 @@
-// src/components/Modal.jsx
 import React from "react";
+import type { ReactNode, MouseEvent } from "react";
 
-const Modal = ({ isOpen, onClose, children }) => {
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: ReactNode;
+}
+
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
+
+  const handleBackdropClick = () => {
+    onClose();
+  };
+
+  const handleContentClick = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+  };
 
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      onClick={onClose}
+      onClick={handleBackdropClick}
     >
       <div
         className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg relative"
-        onClick={(e) => e.stopPropagation()}
+        onClick={handleContentClick}
       >
         <button
           onClick={onClose}

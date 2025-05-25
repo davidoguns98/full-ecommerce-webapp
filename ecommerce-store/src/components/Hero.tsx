@@ -1,21 +1,19 @@
-// src/components/Hero.tsx
-
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const heroImages = [
   {
-    url: "/hero1.jpg",
+    url: "https://media.istockphoto.com/id/1867213758/photo/caucasian-female-photographer-taking-photos-of-the-female-fashion-model-black-ethnicity-while.webp?a=1&b=1&s=612x612&w=0&k=20&c=8QtePISE5T8gmj6ivdUbOEPnmXFWb41uTlxf8ffuN6g=",
     heading: "Shop the Latest Trends",
     subtext: "Discover the newest arrivals and best deals today!",
   },
   {
-    url: "/hero2.jpg",
+    url: "https://media.istockphoto.com/id/2161842568/photo/business-persons-on-meeting-in-the-office.webp?a=1&b=1&s=612x612&w=0&k=20&c=0Yb0lGE7e4ARdM6nETu0j197NStV_0IZqIbNDoytcUU=",
     heading: "Upgrade Your Style",
     subtext: "Hand-picked styles for every occasion.",
   },
   {
-    url: "/hero3.jpg",
+    url: "https://media.istockphoto.com/id/1498065619/photo/shot-of-a-desk-in-an-office-with-a-mobile-phone-laptop-camera-power-bank-and-watch-timepiece.webp?a=1&b=1&s=612x612&w=0&k=20&c=s-lLVhydQblcsc62p4r1_17Ep7Vucs6hEx5PtLGL-Fs=",
     heading: "Exclusive Offers",
     subtext: "Limited-time discounts on top products!",
   },
