@@ -91,8 +91,12 @@ const SignInSignUpModal: React.FC<SignInSignUpModalProps> = ({
 
       onAuthSuccess?.();
       onClose();
-    } catch {
-      setErrorMsg("An unexpected error occurred");
+    } catch (err) {
+      if (err instanceof Error) {
+        setErrorMsg(err.message);
+      } else {
+        setErrorMsg("An error occurred");
+      }
     }
   };
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
+import { supabase } from "../supabaseClient";
 
 const FeedbackCTA = () => {
   const [form, setForm] = useState({
@@ -8,22 +9,35 @@ const FeedbackCTA = () => {
     message: "",
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setStatusMessage("");
 
-    const subject = `Feedback from ${form.name}`;
-    const body = `Name: ${form.name}%0D%0AEmail: ${form.email}%0D%0A%0D%0A${form.message}`;
-    const mailtoLink = `mailto:davidoguns98@gmail.com?subject=${encodeURIComponent(
-      subject
-    )}&body=${encodeURIComponent(body)}`;
+    const { name, email, message } = form;
 
-    window.location.href = mailtoLink;
+    const { error } = await supabase
+      .from("feedbacks")
+      .insert([{ name, email, message }]);
+
+    if (error) {
+      setStatusMessage("❌ Failed to send feedback. Please try again.");
+      console.error("Supabase error:", error.message);
+    } else {
+      setStatusMessage("✅ Feedback sent successfully!");
+      setForm({ name: "", email: "", message: "" }); // Clear form
+    }
+
+    setIsSubmitting(false);
   };
 
   return (
@@ -66,9 +80,21 @@ const FeedbackCTA = () => {
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
+            disabled={isSubmitting}
           >
-            Send Feedback
+            {isSubmitting ? "Sending..." : "Send Feedback"}
           </button>
+          {statusMessage && (
+            <p
+              className={`text-sm mt-2 ${
+                statusMessage.startsWith("✅")
+                  ? "text-green-600"
+                  : "text-red-600"
+              }`}
+            >
+              {statusMessage}
+            </p>
+          )}
         </form>
       </div>
     </section>

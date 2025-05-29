@@ -6,6 +6,7 @@ import CartPage from "./pages/CartPage";
 import Order from "./pages/Order";
 import { supabase } from "./supabaseClient";
 import type { User } from "@supabase/supabase-js";
+import OrdersPage from "./pages/Orders";
 interface Product {
   id: string;
   title: string;
@@ -156,6 +157,7 @@ function App() {
         path="/order"
         element={<Order cart={cart} user={user} setCart={setCart} />}
       />
+      <Route path="/orders" element={<OrdersPage user={user} />} />
     </Routes>
   );
 }
