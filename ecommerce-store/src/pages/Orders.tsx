@@ -4,17 +4,33 @@ import type { User } from "@supabase/supabase-js";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+interface CartItem {
+  id: string;
+  title: string;
+  price: number;
+  category: string;
+  image: string;
+  description: string;
+  rating: number;
+  stock: boolean;
+  quantity: number;
+}
+
 interface Order {
   id: number;
   total: number;
   created_at: string;
   status: string;
-  items: string; // assuming this is a stringified JSON
+  items: string; // stringified JSON
+}
+interface OrderItem {
+  title: string;
+  quantity: number;
 }
 
 interface OrdersPageProps {
   user: User | null;
-  cart: null;
+  cart: CartItem[];
 }
 
 const OrdersPage: React.FC<OrdersPageProps> = ({ user, cart }) => {
@@ -47,11 +63,11 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ user, cart }) => {
 
   return (
     <>
-      <Navbar user={user} />
+      <Navbar user={user} cart={cart ?? []} />
       <div className="max-w-4xl mx-auto py-8">
         <h2 className="text-2xl font-bold mb-6">My Orders</h2>
         {orders.map((order) => {
-          const items: any[] = JSON.parse(order.items); // convert back to array
+          const items: OrderItem[] = JSON.parse(order.items) ?? [];
           return (
             <div key={order.id} className="border p-4 mb-4 rounded shadow">
               <p className="font-semibold">Order ID: {order.id}</p>

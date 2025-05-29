@@ -157,7 +157,7 @@ function App() {
         path="/order"
         element={<Order cart={cart} user={user} setCart={setCart} />}
       />
-      <Route path="/orders" element={<OrdersPage user={user} />} />
+      <Route path="/orders" element={<OrdersPage user={user} cart={cart} />} />
     </Routes>
   );
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const heroImages = [
   {
@@ -62,16 +63,12 @@ const Hero = () => {
                 >
                   {heroImages[current].subtext}
                 </motion.p>
-                <motion.a
-                  href="/products"
+                <Link
+                  to="/products"
                   className="inline-block bg-yellow-400 text-gray-800 py-2 px-6 rounded-lg text-lg hover:bg-yellow-300"
-                  initial={{ scale: 0.95 }}
-                  animate={{ scale: 1 }}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ delay: 0.6 }}
                 >
                   Shop Now
-                </motion.a>
+                </Link>
               </div>
             </div>
           </div>
