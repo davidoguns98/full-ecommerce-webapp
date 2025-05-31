@@ -85,7 +85,8 @@ const TrendingProducts: React.FC<TrendingProductsProps> = ({
               <div
                 key={product.id}
                 onClick={() => handleProductClick(product)}
-                className="cursor-pointer border rounded-md shadow-sm hover:shadow-md transition p-4 flex flex-col"
+                className="cursor-pointer border border-gray-200 rounded-md shadow-sm transition-transform transform p-4 flex flex-col 
+             hover:-translate-y-1 hover:scale-[0.98] hover:border-blue-600 hover:bg-blue-50"
               >
                 <img
                   src={product.image}

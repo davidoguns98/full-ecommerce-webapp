@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import { supabase } from "../supabaseClient";
+import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 interface SignInSignUpModalProps {
   onClose: () => void;
@@ -81,12 +83,17 @@ const SignInSignUpModal: React.FC<SignInSignUpModalProps> = ({
 
           if (profileError) throw profileError;
         }
+
+        toast.success("User account created successfully");
       } else {
         const { error: signInError } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
+
         if (signInError) throw signInError;
+
+        toast.success("Login successful");
       }
 
       onAuthSuccess?.();
@@ -94,6 +101,7 @@ const SignInSignUpModal: React.FC<SignInSignUpModalProps> = ({
     } catch (err) {
       if (err instanceof Error) {
         setErrorMsg(err.message);
+        toast.error(err.message || "An error occurred");
       } else {
         setErrorMsg("An error occurred");
       }
@@ -102,9 +110,19 @@ const SignInSignUpModal: React.FC<SignInSignUpModalProps> = ({
 
   return (
     <div className="text-gray-800 flex flex-col items-center justify-between mx-auto">
-      <h2 className="text-2xl font-bold mb-4">
-        {isSignUp ? "Create Account" : "Sign In"}
-      </h2>
+      <div className="relative w-full mb-4">
+        <div className="absolute left-0 top-0">
+          <Link to="/" className="flex items-center space-x-2">
+            <img src="logo.png" alt="Logo" className="h-5 w-auto" />
+          </Link>
+        </div>
+        <div className="flex justify-center">
+          <h2 className="text-2xl font-bold">
+            {isSignUp ? "Create Account" : "Sign In"}
+          </h2>
+        </div>
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         {isSignUp && (
           <>

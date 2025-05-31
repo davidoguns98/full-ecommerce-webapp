@@ -7,6 +7,7 @@ import Order from "./pages/Order";
 import { supabase } from "./supabaseClient";
 import type { User } from "@supabase/supabase-js";
 import OrdersPage from "./pages/Orders";
+import toast, { Toaster } from "react-hot-toast";
 interface Product {
   id: string;
   title: string;
@@ -98,67 +99,95 @@ function App() {
             : item
         );
       }
+      toast.success("item added to cart");
       return [...prevCart, { ...product, quantity: 1 }];
     });
   };
 
   const handleQuantityChange = (id: string, quantity: number) => {
-    setCart((prevCart) =>
-      prevCart.map((item) => (item.id === id ? { ...item, quantity } : item))
-    );
+    setCart((prevCart) => {
+      const updatedCart = prevCart.map((item) => {
+        if (item.id === id) {
+          if (quantity > item.quantity) {
+            toast.success("Quantity increased!");
+          }
+          return { ...item, quantity };
+        }
+        return item;
+      });
+      return updatedCart;
+    });
   };
 
   const handleRemove = (id: string) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
+    setCart((prevCart) => {
+      const removedItem = prevCart.find((item) => item.id === id);
+      if (removedItem) {
+        toast.success(`Removed "${removedItem.title}" from cart.`, {
+          duration: 3000,
+          style: {
+            background: "#333",
+            color: "#fff",
+          },
+        });
+      }
+      return prevCart.filter((item) => item.id !== id);
+    });
   };
 
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <Home
-            cart={cart}
-            onAddToCart={handleAddToCart}
-            user={user}
-            loading={loading}
-            products={products}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-          />
-        }
-      />
-      <Route
-        path="/products"
-        element={
-          <Products
-            cart={cart}
-            user={user}
-            onAddToCart={handleAddToCart}
-            products={products}
-            loading={loading}
-            selectedCategory={selectedCategory}
-            setSelectedCategory={setSelectedCategory}
-          />
-        }
-      />
-      <Route
-        path="/cart"
-        element={
-          <CartPage
-            cart={cart}
-            onQuantityChange={handleQuantityChange}
-            onRemove={handleRemove}
-            user={user}
-          />
-        }
-      />
-      <Route
-        path="/order"
-        element={<Order cart={cart} user={user} setCart={setCart} />}
-      />
-      <Route path="/orders" element={<OrdersPage user={user} cart={cart} />} />
-    </Routes>
+    <>
+      <Toaster position="top-right" reverseOrder={false} />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Home
+              cart={cart}
+              onAddToCart={handleAddToCart}
+              user={user}
+              loading={loading}
+              products={products}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+            />
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <Products
+              cart={cart}
+              user={user}
+              onAddToCart={handleAddToCart}
+              products={products}
+              loading={loading}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+            />
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <CartPage
+              cart={cart}
+              onQuantityChange={handleQuantityChange}
+              onRemove={handleRemove}
+              user={user}
+            />
+          }
+        />
+        <Route
+          path="/order"
+          element={<Order cart={cart} user={user} setCart={setCart} />}
+        />
+        <Route
+          path="/orders"
+          element={<OrdersPage user={user} cart={cart} />}
+        />
+      </Routes>
+    </>
   );
 }
 

@@ -16,18 +16,18 @@ interface CartItem {
   quantity: number;
 }
 
-interface Order {
-  id: number;
-  total: number;
-  created_at: string;
-  status: string;
-  items: string; // stringified JSON
-}
 interface OrderItem {
   title: string;
   quantity: number;
 }
 
+interface Order {
+  id: number;
+  total: number;
+  created_at: string;
+  status: string;
+  items: OrderItem[]; // stringified JSON
+}
 interface OrdersPageProps {
   user: User | null;
   cart: CartItem[];
@@ -67,7 +67,7 @@ const OrdersPage: React.FC<OrdersPageProps> = ({ user, cart }) => {
       <div className="max-w-4xl mx-auto py-8">
         <h2 className="text-2xl font-bold mb-6">My Orders</h2>
         {orders.map((order) => {
-          const items: OrderItem[] = JSON.parse(order.items) ?? [];
+          const items: OrderItem[] = order.items ?? [];
           return (
             <div key={order.id} className="border p-4 mb-4 rounded shadow">
               <p className="font-semibold">Order ID: {order.id}</p>

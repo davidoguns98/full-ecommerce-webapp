@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import type { User } from "@supabase/supabase-js";
+import toast from "react-hot-toast";
 
 interface Product {
   id: string;
@@ -38,6 +39,13 @@ const OrderPage: React.FC<OrderPageProps> = ({ cart, setCart, user }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (!user) {
+      toast.error("Please log in to place an order.");
+      navigate("/order"); // 👈 redirect to your login route
+    }
+  }, [user, navigate]);
+
   const totalPrice = cart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
@@ -58,11 +66,23 @@ const OrderPage: React.FC<OrderPageProps> = ({ cart, setCart, user }) => {
 
     setLoading(true);
 
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError || !user) {
+      setLoading(false);
+      toast.error("User not authenticated. Please log in.");
+      return;
+    }
+
     const { error } = await supabase.from("orders").insert([
       {
         ...formData,
         total: totalPrice,
         items: cart,
+        user_id: user.id,
       },
     ]);
 
@@ -70,11 +90,11 @@ const OrderPage: React.FC<OrderPageProps> = ({ cart, setCart, user }) => {
 
     if (error) {
       console.error("Error saving order:", error);
-      alert("There was an issue placing your order.");
+      toast.error(error.message || "An error has occurred");
     } else {
-      alert("Order placed successfully!");
+      toast.success("Order placed successfully!");
       setCart([]); // clear cart
-      navigate("/thank-you"); // redirect
+      navigate("/"); // redirect
     }
   };
 

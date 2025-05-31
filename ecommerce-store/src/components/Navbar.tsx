@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   faBars,
   faBox,
@@ -9,6 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { supabase } from "../supabaseClient";
+import { useLocation } from "react-router-dom";
 import Modal from "./Modal";
 import SignInSignUpModal from "./SignInSignUpModal";
 import type { User } from "@supabase/supabase-js";
@@ -35,11 +36,18 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ cart = [], user }) => {
+  const location = useLocation();
+
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isDesktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
   const [isMobileDropdownOpen, setMobileDropdownOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
 
+  useEffect(() => {
+    if (!user && location.pathname === "/order") {
+      setShowAuthModal(true);
+    }
+  }, [user, location.pathname]);
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   const handleLogout = async () => {

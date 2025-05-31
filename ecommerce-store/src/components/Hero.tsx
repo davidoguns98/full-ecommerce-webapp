@@ -4,17 +4,17 @@ import { Link } from "react-router-dom";
 
 const heroImages = [
   {
-    url: "https://media.istockphoto.com/id/1867213758/photo/caucasian-female-photographer-taking-photos-of-the-female-fashion-model-black-ethnicity-while.webp?a=1&b=1&s=612x612&w=0&k=20&c=8QtePISE5T8gmj6ivdUbOEPnmXFWb41uTlxf8ffuN6g=",
+    url: "https://media.istockphoto.com/id/2150506690/photo/e-commerce-online-shopping-concept-with-digital-add-to-cart-feature-on-circuit-background.jpg?s=612x612&w=is&k=20&c=-qY43gT35MxFDwzoE4-I1_BIY7UbnGVlhhUjDwO2Tqk=",
     heading: "Shop the Latest Trends",
     subtext: "Discover the newest arrivals and best deals today!",
   },
   {
-    url: "https://media.istockphoto.com/id/2161842568/photo/business-persons-on-meeting-in-the-office.webp?a=1&b=1&s=612x612&w=0&k=20&c=0Yb0lGE7e4ARdM6nETu0j197NStV_0IZqIbNDoytcUU=",
+    url: "https://media.istockphoto.com/id/2187887661/photo/shopping-cart-sign-and-binary-code-background-promotion-for-digital-sales-and-online-shopping.webp?a=1&b=1&s=612x612&w=0&k=20&c=1wDdwdN5P0YbKhh-drXc0bnre6Yqu2vG0hElmF1kiK8=",
     heading: "Upgrade Your Style",
     subtext: "Hand-picked styles for every occasion.",
   },
   {
-    url: "https://media.istockphoto.com/id/1498065619/photo/shot-of-a-desk-in-an-office-with-a-mobile-phone-laptop-camera-power-bank-and-watch-timepiece.webp?a=1&b=1&s=612x612&w=0&k=20&c=s-lLVhydQblcsc62p4r1_17Ep7Vucs6hEx5PtLGL-Fs=",
+    url: "https://media.istockphoto.com/id/1972284692/photo/digital-cart-icon-on-future-tech-background-online-shopping-evolution-futuristic-shopping.webp?a=1&b=1&s=612x612&w=0&k=20&c=K7G451e5Hrxv-Akc7jFFvO7qdDLbt_zwxoS2Fh1AR9o=",
     heading: "Exclusive Offers",
     subtext: "Limited-time discounts on top products!",
   },
@@ -39,13 +39,15 @@ const Hero = () => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0.4 }}
           transition={{ duration: 1 }}
-          className="absolute inset-0"
+          className="absolute inset-0 h-full w-full"
         >
           <div
-            className="h-full w-full bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroImages[current].url})` }}
+            className="h-full w-full bg-cover bg-center "
+            style={{
+              backgroundImage: `url(${heroImages[current].url})`,
+            }}
           >
-            <div className="bg-black bg-opacity-50 h-full flex items-center justify-center">
+            <div className=" bg-opacity-50 h-full flex items-center justify-center">
               <div className="text-center px-4 md:px-8 text-white">
                 <motion.h1
                   className="text-3xl md:text-5xl font-bold mb-4"
