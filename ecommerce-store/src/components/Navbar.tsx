@@ -13,6 +13,7 @@ import { useLocation } from "react-router-dom";
 import Modal from "./Modal";
 import SignInSignUpModal from "./SignInSignUpModal";
 import type { User } from "@supabase/supabase-js";
+import toast from "react-hot-toast";
 
 // Types
 interface Product {
@@ -52,6 +53,7 @@ const Navbar: React.FC<NavbarProps> = ({ cart = [], user }) => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    toast.success("Logout successful");
   };
   return (
     <nav className="sticky top-0 z-50 bg-gray-800 text-white shadow-md">
