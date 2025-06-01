@@ -91,10 +91,10 @@ export default function ManageOrders() {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
+            {orders.map((order, idx) => (
               <tr
-                key={order.user_id}
-                className="border-t hover:bg-gray-50"
+                key={idx}
+                className="border-t hover:bg-gray-50 cursor-pointer"
                 onClick={() => navigate(`/admin/orders/view/${order.user_id}`)}
               >
                 <td className="p-2 font-medium">{order.fullname}</td>

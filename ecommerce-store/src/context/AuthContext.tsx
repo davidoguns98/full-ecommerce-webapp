@@ -1,11 +1,24 @@
-// src/context/AdminAuthContext.tsx
-import { createContext, useContext, useEffect, useState } from "react";
+// src/context/AdminAuthProvider.tsx
+import { createContext, useEffect, useState } from "react";
+import type { ReactNode } from "react";
 import { supabase } from "../supabaseClient";
+import type { User } from "@supabase/supabase-js";
 
-const AdminAuthContext = createContext(null);
+interface AdminAuthContextType {
+  admin: User | null;
+  loading: boolean;
+}
 
-export const AdminAuthProvider = ({ children }) => {
-  const [admin, setAdmin] = useState(null);
+export const AdminAuthContext = createContext<AdminAuthContextType | null>(
+  null
+);
+
+interface AdminAuthProviderProps {
+  children: ReactNode;
+}
+
+export const AdminAuthProvider = ({ children }: AdminAuthProviderProps) => {
+  const [admin, setAdmin] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,6 +37,12 @@ export const AdminAuthProvider = ({ children }) => {
         .select("role")
         .eq("id", session.user.id)
         .single();
+
+      if (error) {
+        console.error("Error fetching admin role:", error);
+        setLoading(false);
+        return;
+      }
 
       if (data?.role === "admin") {
         setAdmin(session.user);
@@ -47,5 +66,3 @@ export const AdminAuthProvider = ({ children }) => {
     </AdminAuthContext.Provider>
   );
 };
-
-export const useAdminAuth = () => useContext(AdminAuthContext);
