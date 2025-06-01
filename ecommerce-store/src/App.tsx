@@ -8,6 +8,14 @@ import { supabase } from "./supabaseClient";
 import type { User } from "@supabase/supabase-js";
 import OrdersPage from "./pages/Orders";
 import toast, { Toaster } from "react-hot-toast";
+import AdminLogin from "./pages/admin/Login";
+import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
+import Dashboard from "./pages/admin/dashboard";
+import ProductList from "./pages/admin/dashboard/products/List";
+import AddProduct from "./pages/admin/dashboard/products/Add";
+import EditProduct from "./pages/admin/dashboard/products/Edit";
+import ManageOrders from "./pages/admin/dashboard/orders/List";
+import OrderDetail from "./pages/admin/dashboard/orders/View";
 interface Product {
   id: string;
   title: string;
@@ -186,6 +194,18 @@ function App() {
           path="/orders"
           element={<OrdersPage user={user} cart={cart} />}
         />
+
+        {/* Admin routes */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        {/* Protected Admin */}
+        <Route path="/admin" element={<ProtectedAdminRoute />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="products" element={<ProductList />} />
+          <Route path="products/new" element={<AddProduct />} />
+          <Route path="products/edit/:id" element={<EditProduct />} />
+          <Route path="orders" element={<ManageOrders />} />
+          <Route path="orders/view/:id" element={<OrderDetail />} />
+        </Route>
       </Routes>
     </>
   );
